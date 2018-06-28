@@ -21,7 +21,7 @@ def callback_inline(call):
     if call.message:
         if call.data:
             bot.answer_callback_query(call.id, text="Done!")
-            bot.edit_message_text((int(call.message.text)+1),call.message.chat.id,call.message.id)
+            bot.edit_message_text((int(call.message.text)+1),call.message.chat.id,call.id)
             bot.answer_callback_query(call.id, text="+1")
     pass
             # bot.send_message(call.data, call.message.chat.username'test')
