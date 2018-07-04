@@ -16,11 +16,25 @@ markup.row(telebot.types.InlineKeyboardButton('+3', callback_data='3'))
 markup.row(telebot.types.InlineKeyboardButton('+4', callback_data='4'))
 markup.row(telebot.types.InlineKeyboardButton('+5', callback_data='5'))
 
+def add_new_polling(message_id):
+    query = """SELECT votes
+        	        FROM public."polls"
+                    WHERE id={};"""
+    query_result = db_query.execute_query(query.format(message_id))
+    if len(query_result.value) < 1:
+        query = """INSERT INTO public.polls
+                    (id, votes)
+	         VALUES ({}, 0);"""
+        query_result = db_query.execute_query(query.format(message_id))
+        add_new_polling(message_id)
+    else:
+        return query_result.value[0][0]
+
 
 @bot.message_handler(regexp="/test")
 def test(message):
-
     bot.send_message(message.chat.id, 0,reply_markup=markup)
+
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -28,8 +42,9 @@ def callback_inline(call):
     if call.message:
         if call.data:
             # bot.answer_callback_query(call.id, text="Done!")
-            bot.edit_message_text((str(int(call.message.text)+int(call.data))),call.message.chat.id,call.message.message_id, reply_markup=markup)
-            bot.answer_callback_query(call.id, text="+1")
+            votes = add_new_polling(call.message.message_id)
+            bot.edit_message_text(str((int(call.message.text)+int(call.data))/votes),call.message.chat.id,call.message.message_id, reply_markup=markup)
+            bot.answer_callback_query(call.id, text=str(call.data))
     pass
             # bot.send_message(call.data, call.message.chat.username'test')
             # for data in call.message.entities[1]:
