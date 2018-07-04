@@ -49,6 +49,7 @@ def callback_inline(call):
         if call.data:
             # bot.answer_callback_query(call.id, text="Done!")
             votes = add_new_polling(call.message.message_id)
+            print(votes)
             add_vote(call.message.message_id, votes)
             print(int(votes)+1)
             votes = add_new_polling(call.message.message_id)
