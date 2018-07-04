@@ -30,6 +30,12 @@ def add_new_polling(message_id):
     else:
         return query_result.value[0][0]
 
+def add_vote(message_id,votes):
+    query = """UPDATE public.polls
+	            SET votes={}
+	            WHERE id={};"""
+    query_result = db_query.execute_query(query.format(int(votes)+1,message_id), is_dml=True)
+
 
 @bot.message_handler(regexp="/test")
 def test(message):
@@ -42,6 +48,9 @@ def callback_inline(call):
     if call.message:
         if call.data:
             # bot.answer_callback_query(call.id, text="Done!")
+            votes = add_new_polling(call.message.message_id)
+            add_vote(call.message.message_id, votes)
+            print(int(votes)+1)
             votes = add_new_polling(call.message.message_id)
             print(votes)
             print(str((int(call.message.text)+int(call.data))/int(votes)))
