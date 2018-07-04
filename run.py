@@ -17,7 +17,7 @@ markup.row(telebot.types.InlineKeyboardButton('+4', callback_data='4'))
 markup.row(telebot.types.InlineKeyboardButton('+5', callback_data='5'))
 
 def add_new_polling(message_id):
-    query = """SELECT votes
+    query = """SELECT *
         	        FROM public."polls"
                     WHERE id={};"""
     query_result = db_query.execute_query(query.format(message_id))
@@ -28,7 +28,7 @@ def add_new_polling(message_id):
         query_result = db_query.execute_query(query.format(message_id), is_dml=True)
         add_new_polling(message_id)
     else:
-        return query_result.value[0][0]
+        return query_result.value[0][1]
 
 def add_vote(message_id,votes):
     query = """UPDATE public.polls
