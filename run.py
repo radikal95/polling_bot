@@ -11,6 +11,11 @@ logging.basicConfig(filename="sample.log", level=logging.INFO)
 
 markup = telebot.types.InlineKeyboardMarkup()
 markup.row(telebot.types.InlineKeyboardButton('+1', callback_data='1'))
+markup.row(telebot.types.InlineKeyboardButton('+2', callback_data='2'))
+markup.row(telebot.types.InlineKeyboardButton('+3', callback_data='3'))
+markup.row(telebot.types.InlineKeyboardButton('+4', callback_data='4'))
+markup.row(telebot.types.InlineKeyboardButton('+5', callback_data='5'))
+
 
 @bot.message_handler(regexp="/test")
 def test(message):
@@ -23,7 +28,7 @@ def callback_inline(call):
     if call.message:
         if call.data:
             # bot.answer_callback_query(call.id, text="Done!")
-            bot.edit_message_text((str(int(call.message.text)+1)),call.message.chat.id,call.message.message_id, reply_markup=markup)
+            bot.edit_message_text((str(int(call.message.text)+int(call.data))),call.message.chat.id,call.message.message_id, reply_markup=markup)
             bot.answer_callback_query(call.id, text="+1")
     pass
             # bot.send_message(call.data, call.message.chat.username'test')
