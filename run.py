@@ -10,7 +10,7 @@ bot = telebot.TeleBot(config.token)
 logging.basicConfig(filename="sample.log", level=logging.INFO)
 
 markup = telebot.types.InlineKeyboardMarkup()
-markup.row(telebot.types.InlineKeyboardButton('+1', callback_data=''))
+markup.row(telebot.types.InlineKeyboardButton('+1', callback_data='1'))
 
 @bot.message_handler(regexp="/test")
 def test(message):
