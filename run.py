@@ -64,7 +64,7 @@ def callback_inline(call):
             except:
                 add_vote(call.message.message_id, 0)
             votes = add_new_polling(call.message.message_id)
-            bot.edit_message_text(call.message.text.replace(str(summa),str(round(((summa+int(call.data))/int(votes)),2))),call.message.chat.id,call.message.message_id, reply_markup=markup)
+            bot.edit_message_text(call.message.text.replace(str(summa+0.0),str(round(((summa+int(call.data))/int(votes)),2))),call.message.chat.id,call.message.message_id, reply_markup=markup)
             bot.answer_callback_query(call.id, text=str(call.data))
     pass
             # bot.send_message(call.data, call.message.chat.username'test')
