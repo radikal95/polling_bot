@@ -45,7 +45,7 @@ def test(message):
                  "Мы сконцентрированы: понимаем план и приоритеты шагов к общей цели и четко им следуем: ",
                  "Мы эффективно проводим встречи (следуем повестке, не уходим в лишние детали, все участники встречи вовлечены и пр.): "]
     for msg in questions:
-        bot.send_message(message.chat.id, msg+ '0' ,reply_markup=markup)
+        bot.send_message(message.chat.id, msg+ '0 (0)' ,reply_markup=markup)
 
 
 
@@ -56,7 +56,7 @@ def callback_inline(call):
             # bot.answer_callback_query(call.id, text="Done!")
             votes = add_new_polling(call.message.message_id)
             try:
-                summa = float(call.message.text[call.message.text.rfind(':')+1:len(call.message.text)])*int(votes)
+                summa = float(call.message.text[call.message.text.rfind(':')+1:call.message.text.rfind('(')])*int(votes)
             except:
                 summa = 0
             try:
