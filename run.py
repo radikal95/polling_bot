@@ -54,6 +54,12 @@ def callback_inline(call):
             # bot.answer_callback_query(call.id, text="Done!")
             votes = add_new_polling(call.message.message_id)
             print(votes)
+            query = """SELECT votes
+                    	        FROM public.polls
+                                WHERE id={};"""
+            query_result = db_query.execute_query(query.format(call.message.message_id))
+            votes = query_result.value[0][0]
+            print(votes)
             summa = float(call.message.text)*int(votes)
             add_vote(call.message.message_id, votes)
             print(int(votes)+1)
