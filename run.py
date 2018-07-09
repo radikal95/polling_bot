@@ -17,14 +17,14 @@ markup.row(telebot.types.InlineKeyboardButton('1', callback_data='1'),
            telebot.types.InlineKeyboardButton('5', callback_data='5'))
 
 def add_new_polling(message_id):
-    query = """SELECT *
+    query = """SELECT votes
         	        FROM public.polls
                     WHERE id={};"""
     query_result = db_query.execute_query(query.format(message_id))
     if len(query_result.value) < 1:
         query = """INSERT INTO public.polls
                     (id, votes)
-	         VALUES ({}, '0');"""
+	         VALUES ({}, 0);"""
         query_result = db_query.execute_query(query.format(message_id), is_dml=True)
         add_vote(message_id,0)
         add_new_polling(message_id)
