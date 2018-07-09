@@ -24,7 +24,7 @@ def add_new_polling(message_id):
     if len(query_result.value) < 1:
         query = """INSERT INTO public.polls
                     (id, votes)
-	         VALUES ({}, 0);"""
+	         VALUES ({}, '0');"""
         query_result = db_query.execute_query(query.format(message_id), is_dml=True)
         add_vote(message_id,0)
         add_new_polling(message_id)
