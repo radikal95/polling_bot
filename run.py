@@ -56,7 +56,7 @@ def callback_inline(call):
             # bot.answer_callback_query(call.id, text="Done!")
             votes = add_new_polling(call.message.message_id)
             try:
-                summa = float(call.message.text)*int(votes)
+                summa = float(call.message.text[call.message.text.rfind(':')+1:len(call.message.text)])*int(votes)
             except:
                 summa = 0
             try:
@@ -65,7 +65,8 @@ def callback_inline(call):
                 add_vote(call.message.message_id, 0)
             votes = add_new_polling(call.message.message_id)
             bot.edit_message_text(call.message.text[0:call.message.text.rfind(':')+2]+str(round(((summa+int(call.data))/int(votes)),2)),
-                                  call.message.chat.id,call.message.message_id,
+                                  call.message.chat.id,
+                                  call.message.message_id,
                                   reply_markup=markup)
             bot.answer_callback_query(call.id, text=str(call.data))
     pass
