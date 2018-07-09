@@ -24,8 +24,8 @@ def add_new_polling(message_id):
     if len(query_result.value) < 1:
         query = """INSERT INTO public.polls
                     (id, votes)
-	         VALUES ({}, 0);"""
-        query_result = db_query.execute_query(query.format(message_id), is_dml=True)
+	         VALUES ({}, {});"""
+        query_result = db_query.execute_query(query.format(message_id,0), is_dml=True)
         add_new_polling(message_id)
     else:
         return query_result.value[0][1]
@@ -48,7 +48,7 @@ def callback_inline(call):
     if call.message:
         if call.data:
             # bot.answer_callback_query(call.id, text="Done!")
-            votes = add_new_polling(call.message.message_id)
+            votes = add_new_polling(call.message.message_id, call.data)
             print(votes)
             summa = float(call.message.text)*int(votes)
             add_vote(call.message.message_id, votes)
