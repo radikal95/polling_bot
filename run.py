@@ -18,7 +18,7 @@ markup.row(telebot.types.InlineKeyboardButton('1', callback_data='1'),
 
 def add_new_polling(message_id):
     query = """SELECT *
-        	        FROM public."polls"
+        	        FROM public.polls
                     WHERE id={};"""
     query_result = db_query.execute_query(query.format(message_id))
     if len(query_result.value) < 1:
