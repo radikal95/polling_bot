@@ -48,7 +48,7 @@ def callback_inline(call):
     if call.message:
         if call.data:
             # bot.answer_callback_query(call.id, text="Done!")
-            votes = add_new_polling(call.message.message_id, call.data)
+            votes = add_new_polling(call.message.message_id)
             print(votes)
             summa = float(call.message.text)*int(votes)
             add_vote(call.message.message_id, votes)
