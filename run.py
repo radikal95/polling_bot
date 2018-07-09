@@ -29,19 +29,13 @@ def add_new_polling(message_id):
         add_vote(message_id,0)
         add_new_polling(message_id)
     else:
-        print('!query_result!')
-        print(query_result.value[0][1])
         return query_result.value[0][1]
 
 def add_vote(message_id,votes):
     query = """UPDATE public.polls
 	            SET votes={}
 	            WHERE id={};"""
-    # try:
     query_result = db_query.execute_query(query.format(int(votes)+1,message_id), is_dml=True)
-    # except:
-    #     query_result = db_query.execute_query(query.format(1, message_id), is_dml=True)
-
 
 @bot.message_handler(regexp="/test")
 def test(message):
@@ -55,16 +49,15 @@ def callback_inline(call):
         if call.data:
             # bot.answer_callback_query(call.id, text="Done!")
             votes = add_new_polling(call.message.message_id)
-            print(votes)
             try:
                 summa = float(call.message.text)*int(votes)
             except:
                 summa = 0
-            add_vote(call.message.message_id, votes)
-            print(int(votes)+1)
+            try:
+                add_vote(call.message.message_id, votes)
+            except:
+                add_vote(call.message.message_id, 0)
             votes = add_new_polling(call.message.message_id)
-            print(votes)
-            print(str((summa+int(call.data))/int(votes)))
             bot.edit_message_text(str((summa+int(call.data))/int(votes)),call.message.chat.id,call.message.message_id, reply_markup=markup)
             bot.answer_callback_query(call.id, text=str(call.data))
     pass
