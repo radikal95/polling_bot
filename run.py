@@ -39,7 +39,13 @@ def add_vote(message_id,votes):
 
 @bot.message_handler(regexp="/test")
 def test(message):
-    bot.send_message(message.chat.id, 0,reply_markup=markup)
+    questions = ["Мне понятна цель и задачи, которые стоят перед проектом со стороны Яндекс Такси: ",
+                 "Роли участников проектной команды распределены, не дублируются и работа ведется в соответствии с этими ролями: ",
+                 "У участников проекта есть понятные роли, они не дублируется и непокрытых зон также нет: ",
+                 "Мы сконцентрированы: понимаем план и приоритеты шагов к общей цели и четко им следуем: ",
+                 "Мы эффективно проводим встречи (следуем повестке, не уходим в лишние детали, все участники встречи вовлечены и пр.): "]
+    for msg in questions:
+        bot.send_message(message.chat.id, msg+ '0' ,reply_markup=markup)
 
 
 
@@ -58,7 +64,7 @@ def callback_inline(call):
             except:
                 add_vote(call.message.message_id, 0)
             votes = add_new_polling(call.message.message_id)
-            bot.edit_message_text(str(round(((summa+int(call.data))/int(votes)),3)),call.message.chat.id,call.message.message_id, reply_markup=markup)
+            bot.edit_message_text(call.message.text.replace(summa,str(round(((summa+int(call.data))/int(votes)),2))),call.message.chat.id,call.message.message_id, reply_markup=markup)
             bot.answer_callback_query(call.id, text=str(call.data))
     pass
             # bot.send_message(call.data, call.message.chat.username'test')
