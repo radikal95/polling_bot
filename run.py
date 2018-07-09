@@ -26,6 +26,7 @@ def add_new_polling(message_id):
                     (id, votes)
 	         VALUES ({}, {});"""
         query_result = db_query.execute_query(query.format(message_id,0), is_dml=True)
+        add_vote(message_id,0)
         add_new_polling(message_id)
     else:
         return query_result.value[0][1]
@@ -34,10 +35,10 @@ def add_vote(message_id,votes):
     query = """UPDATE public.polls
 	            SET votes={}
 	            WHERE id={};"""
-    try:
-        query_result = db_query.execute_query(query.format(int(votes)+1,message_id), is_dml=True)
-    except:
-        query_result = db_query.execute_query(query.format(1, message_id), is_dml=True)
+    # try:
+    query_result = db_query.execute_query(query.format(int(votes)+1,message_id), is_dml=True)
+    # except:
+    #     query_result = db_query.execute_query(query.format(1, message_id), is_dml=True)
 
 
 @bot.message_handler(regexp="/test")
