@@ -17,7 +17,7 @@ markup.row(telebot.types.InlineKeyboardButton('1', callback_data='1'),
            telebot.types.InlineKeyboardButton('5', callback_data='5'))
 
 def add_new_polling(message_id):
-    query = """SELECT votes
+    query = """SELECT *
         	        FROM public.polls
                     WHERE id={};"""
     query_result = db_query.execute_query(query.format(message_id))
@@ -29,6 +29,8 @@ def add_new_polling(message_id):
         add_vote(message_id,0)
         add_new_polling(message_id)
     else:
+        print('!query_result!')
+        print(query_result.value)
         return query_result.value[0][0]
 
 def add_vote(message_id,votes):
@@ -53,12 +55,6 @@ def callback_inline(call):
         if call.data:
             # bot.answer_callback_query(call.id, text="Done!")
             votes = add_new_polling(call.message.message_id)
-            print(votes)
-            query = """SELECT votes
-                    	        FROM public.polls
-                                WHERE id={};"""
-            query_result = db_query.execute_query(query.format(call.message.message_id))
-            votes = query_result.value[0][0]
             print(votes)
             summa = float(call.message.text)*int(votes)
             add_vote(call.message.message_id, votes)
