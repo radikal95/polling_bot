@@ -30,7 +30,7 @@ def add_new_polling(message_id):
         add_new_polling(message_id)
     else:
         print('!query_result!')
-        print(query_result.value)
+        print(query_result.value[0])
         return query_result.value[0][0]
 
 def add_vote(message_id,votes):
