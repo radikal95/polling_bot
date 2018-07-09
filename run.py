@@ -34,7 +34,10 @@ def add_vote(message_id,votes):
     query = """UPDATE public.polls
 	            SET votes={}
 	            WHERE id={};"""
-    query_result = db_query.execute_query(query.format(int(votes)+1,message_id), is_dml=True)
+    try:
+        query_result = db_query.execute_query(query.format(int(votes)+1,message_id), is_dml=True)
+    except:
+        query_result = db_query.execute_query(query.format(1, message_id), is_dml=True)
 
 
 @bot.message_handler(regexp="/test")
