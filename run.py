@@ -31,7 +31,7 @@ def add_new_polling(message_id):
     else:
         print('!query_result!')
         print(query_result.value[0][1])
-        return query_result.value[0][0]
+        return query_result.value[0][1]
 
 def add_vote(message_id,votes):
     query = """UPDATE public.polls
@@ -56,7 +56,10 @@ def callback_inline(call):
             # bot.answer_callback_query(call.id, text="Done!")
             votes = add_new_polling(call.message.message_id)
             print(votes)
-            summa = float(call.message.text)*int(votes)
+            try:
+                summa = float(call.message.text)*int(votes)
+            except:
+                summa = 0
             add_vote(call.message.message_id, votes)
             print(int(votes)+1)
             votes = add_new_polling(call.message.message_id)
