@@ -10,11 +10,11 @@ bot = telebot.TeleBot(config.token)
 logging.basicConfig(filename="sample.log", level=logging.INFO)
 
 markup = telebot.types.InlineKeyboardMarkup()
-markup.row(telebot.types.InlineKeyboardButton('+1', callback_data='1'))
-markup.row(telebot.types.InlineKeyboardButton('+2', callback_data='2'))
-markup.row(telebot.types.InlineKeyboardButton('+3', callback_data='3'))
-markup.row(telebot.types.InlineKeyboardButton('+4', callback_data='4'))
-markup.row(telebot.types.InlineKeyboardButton('+5', callback_data='5'))
+markup.row([telebot.types.InlineKeyboardButton('1', callback_data='1')],
+           [telebot.types.InlineKeyboardButton('2', callback_data='2')],
+           [telebot.types.InlineKeyboardButton('3', callback_data='3')],
+           [telebot.types.InlineKeyboardButton('4', callback_data='4')],
+           [telebot.types.InlineKeyboardButton('5', callback_data='5')])
 
 def add_new_polling(message_id):
     query = """SELECT *
