@@ -93,14 +93,13 @@ def callback_inline(call):
             print(call.data)
             print('CALL')
             print(call)
-
-            if user_is_new(call.message.message_id,call.from_user.id):
-                print(1)
-                data = add_new_polling(call.message.chat.id,call.message.message_id)
-                votes = data[0][3]
-                summa = data[0][4]
-                print('votes ' + str(votes))
-                print('summa ' + str(summa))
+            print(1)
+            data = add_new_polling(call.message.chat.id,call.message.message_id)
+            votes = data[0][3]
+            summa = data[0][4]
+            print('votes ' + str(votes))
+            print('summa ' + str(summa))
+            if user_is_new(call.message.message_id, call.from_user.id):
                 new_summa = (votes*summa + call.data)/(votes+1)
                 add_vote(call.message.message_id,votes)
                 new_sum(call.message.message_id,new_summa)
