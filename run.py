@@ -45,11 +45,11 @@ def create_user_list(message_id):
 
 def user_is_new(message_id,user_id):
     query = """SELECT *
-            	        FROM public.{}
+            	        FROM public."{}"
                         WHERE user_id={};"""
     query_result = db_query.execute_query(query.format(message_id,user_id))
     if len(query_result.value) < 1:
-        query = """INSERT INTO public.{}
+        query = """INSERT INTO public."{}"
                         (user_id)
     	         VALUES ({});"""
         query_result = db_query.execute_query(query.format(message_id,user_id), is_dml=True)
@@ -87,12 +87,6 @@ def callback_inline(call):
         if call.data:
             # bot.answer_callback_query(call.id, text="Done!")
             # user_id = json.loads(call.message)[0]
-            print('CALL.MESSAGE')
-            print(call.message)
-            print('CALL.DATA')
-            print(call.data)
-            print('CALL')
-            print(call)
             print(1)
             data = add_new_polling(call.message.chat.id,call.message.message_id)
             votes = data[0][3]
