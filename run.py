@@ -95,14 +95,18 @@ def callback_inline(call):
             print(call)
 
             if user_is_new(call.message.message_id,call.from_user.id):
+                print(1)
                 data = add_new_polling(call.message.chat.id,call.message.message_id)
                 votes = data[0][3]
                 summa = data[0][4]
+                print('votes ' + str(votes))
+                print('summa ' + str(summa))
                 new_summa = (votes*summa + call.data)/(votes+1)
                 add_vote(call.message.message_id,votes)
                 new_sum(call.message.message_id,new_summa)
                 bot.answer_callback_query(call.id, text=str(call.data))
             else:
+                print(2)
                 bot.answer_callback_query(call.id, text='Already voted')
     pass
 
