@@ -87,7 +87,12 @@ def callback_inline(call):
         if call.data:
             # bot.answer_callback_query(call.id, text="Done!")
             # user_id = json.loads(call.message)[0]
+            print('CALL.MESSAGE')
             print(call.message)
+            print('CALL.DATA')
+            print(call.date)
+            
+
             if user_is_new(call.message.message_id,user_id['from']['id']):
                 data = add_new_polling(call.message.chat.id,call.message.message_id)
                 votes = data[0][3]
