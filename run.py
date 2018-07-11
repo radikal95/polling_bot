@@ -90,8 +90,8 @@ def callback_inline(call):
             print('CALL.MESSAGE')
             print(call.message)
             print('CALL.DATA')
-            print(call.date)
-            
+            print(call.data)
+
 
             if user_is_new(call.message.message_id,user_id['from']['id']):
                 data = add_new_polling(call.message.chat.id,call.message.message_id)
