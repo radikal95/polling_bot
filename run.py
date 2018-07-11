@@ -94,7 +94,7 @@ def callback_inline(call):
             print('CALL')
             print(call)
 
-            if user_is_new(call.message.message_id,user_id['from']['id']):
+            if user_is_new(call.message.message_id,call.from_user.id):
                 data = add_new_polling(call.message.chat.id,call.message.message_id)
                 votes = data[0][3]
                 summa = data[0][4]
