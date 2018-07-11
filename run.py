@@ -42,6 +42,8 @@ def create_user_list(message_id):
             ALTER TABLE public."{}"
             OWNER to root;"""
    query_result = db_query.execute_query(query.format(message_id), is_dml=True)
+   print('CREATE USER LIST')
+   print(query_result.success)
 
 def user_is_new(message_id,user_id):
     query = """SELECT *
@@ -56,6 +58,7 @@ def user_is_new(message_id,user_id):
         return True
     else:
         return False
+
 def add_vote(message_id,votes):
     query = """UPDATE public.polls
 	            SET votes={}
