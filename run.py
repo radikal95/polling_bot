@@ -16,36 +16,68 @@ markup.row(telebot.types.InlineKeyboardButton('1', callback_data='1'),
            telebot.types.InlineKeyboardButton('4', callback_data='4'),
            telebot.types.InlineKeyboardButton('5', callback_data='5'))
 
-def add_new_polling(message_id):
+def add_new_polling(chat_id,message_id):
     query = """SELECT *
         	        FROM public.polls
-                    WHERE id={};"""
+                    WHERE msg_id={};"""
     query_result = db_query.execute_query(query.format(message_id))
     if len(query_result.value) < 1:
         query = """INSERT INTO public.polls
-                    (id, votes)
-	         VALUES ({}, 0);"""
-        query_result = db_query.execute_query(query.format(message_id), is_dml=True)
-        add_vote(message_id,0)
-        add_new_polling(message_id)
+                    (chat_id, msg_id,votes,sum)
+	         VALUES ({}, {},0,0);"""
+        query_result = db_query.execute_query(query.format(chat_id, message_id), is_dml=True)
+        create_user_list(message_id)
+        add_new_polling(chat_id,message_id)
     else:
-        return query_result.value[0][1]
+        return query_result.value
 
+def create_user_list(message_id):
+   query = """CREATE TABLE public."{}"
+            (user_id integer NOT NULL)
+            WITH (
+            OIDS = FALSE
+            )
+            TABLESPACE pg_default;
+
+            ALTER TABLE public."{}"
+            OWNER to root;"""
+   query_result = db_query.execute_query(query.format(message_id), is_dml=True)
+
+def user_is_new(message_id,user_id):
+    query = """SELECT *
+            	        FROM public.{}
+                        WHERE user_id={};"""
+    query_result = db_query.execute_query(query.format(message_id,user_id))
+    if len(query_result.value) < 1:
+        query = """INSERT INTO public.{}
+                        (user_id)
+    	         VALUES ({});"""
+        query_result = db_query.execute_query(query.format(message_id,user_id), is_dml=True)
+        return True
+    else:
+        return False
 def add_vote(message_id,votes):
     query = """UPDATE public.polls
 	            SET votes={}
-	            WHERE id={};"""
+	            WHERE msg_id={};"""
     query_result = db_query.execute_query(query.format(int(votes)+1,message_id), is_dml=True)
+
+def new_sum(message_id,new_summa):
+    query = """UPDATE public.polls
+    	            SET sum={}
+    	            WHERE msg_id={};"""
+    query_result = db_query.execute_query(query.format(new_summa, message_id), is_dml=True)
+
 
 @bot.message_handler(regexp="/test")
 def test(message):
-    questions = ["Мне понятна цель и задачи, которые стоят перед проектом со стороны Яндекс Такси: ",
-                 "Роли участников проектной команды распределены, не дублируются и работа ведется в соответствии с этими ролями: ",
-                 "У участников проекта есть понятные роли, они не дублируется и непокрытых зон также нет: ",
-                 "Мы сконцентрированы: понимаем план и приоритеты шагов к общей цели и четко им следуем: ",
-                 "Мы эффективно проводим встречи (следуем повестке, не уходим в лишние детали, все участники встречи вовлечены и пр.): "]
+    questions = ["Мне понятна цель и задачи, которые стоят перед проектом со стороны Яндекс Такси",
+                 "Роли участников проектной команды распределены, не дублируются и работа ведется в соответствии с этими ролями",
+                 "У участников проекта есть понятные роли, они не дублируется и непокрытых зон также нет",
+                 "Мы сконцентрированы: понимаем план и приоритеты шагов к общей цели и четко им следуем",
+                 "Мы эффективно проводим встречи (следуем повестке, не уходим в лишние детали, все участники встречи вовлечены и пр.)"]
     for msg in questions:
-        bot.send_message(message.chat.id, msg+ '0 (0)' ,reply_markup=markup)
+        bot.send_message(message.chat.id, msg ,reply_markup=markup)
 
 
 
@@ -54,25 +86,17 @@ def callback_inline(call):
     if call.message:
         if call.data:
             # bot.answer_callback_query(call.id, text="Done!")
-            votes = add_new_polling(call.message.message_id)
-            try:
-                summa = float(call.message.text[call.message.text.rfind(':')+1:call.message.text.rfind('(')])*int(votes)
-            except:
-                summa = 0
-            try:
-                add_vote(call.message.message_id, votes)
-            except:
-                add_vote(call.message.message_id, 0)
-            votes = add_new_polling(call.message.message_id)
-            bot.edit_message_text(call.message.text[0:call.message.text.rfind(':')+2]+str(round(((summa+int(call.data))/int(votes)),2)) + ' (' +str(votes)+')',
-                                  call.message.chat.id,
-                                  call.message.message_id,
-                                  reply_markup=markup)
-            bot.answer_callback_query(call.id, text=str(call.data))
+            if user_is_new(call.message.message_id,call.message['from']['id']):
+                data = add_new_polling(call.message.chat.id,call.message.message_id)
+                votes = data[0][3]
+                summa = data[0][4]
+                new_summa = (votes*summa + call.data)/(votes+1)
+                add_vote(call.message.message_id,votes)
+                new_sum(call.message.message_id,new_summa)
+                bot.answer_callback_query(call.id, text=str(call.data))
+            else:
+                bot.answer_callback_query(call.id, text='Already voted')
     pass
-            # bot.send_message(call.data, call.message.chat.username'test')
-            # for data in call.message.entities[1]:
-            #     print((data))
 
 @bot.message_handler(content_types='text')
 def default_answer(message):
