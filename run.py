@@ -82,8 +82,6 @@ def test(message):
     for msg in questions:
         bot.send_message(message.chat.id, msg ,reply_markup=markup)
 
-
-
 @bot.callback_query_handler(func=lambda call: True)
 def callback_inline(call):
     if call.message:
@@ -109,6 +107,19 @@ def callback_inline(call):
                 print(2)
                 bot.answer_callback_query(call.id, text='Already voted')
     pass
+
+@bot.message_handler(regexp="/result")
+def get_result(message):
+    query = """SELECT *
+                	        FROM public.polls
+                            WHERE chat_id={}
+                            ORDER BY DESC
+                            LIMIT 5;"""
+    query_result = db_query.execute_query(query.format(message.chat.id), is_dml=True)
+    print(query_result.value)
+    
+
+
 
 @bot.message_handler(content_types='text')
 def default_answer(message):
