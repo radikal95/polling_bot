@@ -101,8 +101,7 @@ def callback_inline(call):
             print('votes ' + str(votes))
             print('summa ' + str(summa))
             if user_is_new(call.message.message_id, call.from_user.id):
-
-                new_summa = (votes*summa + call.data)/(votes+1)
+                new_summa = (int(votes)*float(summa) + int(call.data))/(int(votes)+1)
                 add_vote(call.message.message_id,votes)
                 new_sum(call.message.message_id,new_summa)
                 bot.answer_callback_query(call.id, text=str(call.data))
