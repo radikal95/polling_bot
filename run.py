@@ -113,7 +113,7 @@ def get_result(message):
     query = """SELECT *
                 	        FROM public.polls
                             WHERE chat_id={}
-                            ORDER BY DESC
+                            ORDER BY msg_id DESC
                             LIMIT 5;"""
     query_result = db_query.execute_query(query.format(message.chat.id))
     print(query_result.value)
