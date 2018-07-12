@@ -41,7 +41,7 @@ def create_user_list(message_id):
 
             ALTER TABLE public."{}"
             OWNER to root;"""
-   query_result = db_query.execute_query(query.format(message_id), is_dml=True)
+   query_result = db_query.execute_query(query.format(message_id,message_id), is_dml=True)
    print('CREATE USER LIST')
    print(query_result.success)
 
