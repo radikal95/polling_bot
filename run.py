@@ -16,7 +16,7 @@ markup.row(telebot.types.InlineKeyboardButton('1', callback_data='1'),
            telebot.types.InlineKeyboardButton('4', callback_data='4'),
            telebot.types.InlineKeyboardButton('5', callback_data='5'))
 
-def add_new_polling(call_data,chat_id,message_id):
+def add_new_polling(chat_id,message_id):
     query = """SELECT *
         	        FROM public.polls
                     WHERE msg_id={};"""
@@ -25,7 +25,7 @@ def add_new_polling(call_data,chat_id,message_id):
         query = """INSERT INTO public.polls
                     (chat_id, msg_id,votes,sum)
 	         VALUES ({}, {},0,0);"""
-        query_result = db_query.execute_query(query.format(chat_id, message_id,call_data), is_dml=True)
+        query_result = db_query.execute_query(query.format(chat_id, message_id), is_dml=True)
         create_user_list(message_id)
         add_new_polling(chat_id,message_id)
     else:
@@ -91,7 +91,7 @@ def callback_inline(call):
             # bot.answer_callback_query(call.id, text="Done!")
             # user_id = json.loads(call.message)[0]
             print(1)
-            data = add_new_polling(call.data,call.message.chat.id,call.message.message_id)
+            data = add_new_polling(call.message.chat.id,call.message.message_id)
             try:
                 votes = data[0][3]
                 summa = data[0][4]
