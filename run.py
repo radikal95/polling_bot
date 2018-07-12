@@ -115,9 +115,9 @@ def get_result(message):
                             WHERE chat_id={}
                             ORDER BY DESC
                             LIMIT 5;"""
-    query_result = db_query.execute_query(query.format(message.chat.id), is_dml=True)
+    query_result = db_query.execute_query(query.format(message.chat.id))
     print(query_result.value)
-    
+
 
 
 
