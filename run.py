@@ -16,16 +16,16 @@ markup.row(telebot.types.InlineKeyboardButton('1', callback_data='1'),
            telebot.types.InlineKeyboardButton('4', callback_data='4'),
            telebot.types.InlineKeyboardButton('5', callback_data='5'))
 
-def add_new_polling(chat_id,message_id):
+def add_new_polling(chat_id,message_id,message_text):
     query = """SELECT *
         	        FROM public.polls
                     WHERE msg_id={};"""
     query_result = db_query.execute_query(query.format(message_id))
     if len(query_result.value) < 1:
         query = """INSERT INTO public.polls
-                    (chat_id, msg_id,votes,sum)
-	         VALUES ({}, {},0,0);"""
-        query_result = db_query.execute_query(query.format(chat_id, message_id), is_dml=True)
+                    (chat_id, msg_id,votes,sum,text)
+	         VALUES ({}, {},0,0,{});"""
+        query_result = db_query.execute_query(query.format(chat_id, message_id,message_text), is_dml=True)
         create_user_list(message_id)
         add_new_polling(chat_id,message_id)
     else:
@@ -38,7 +38,6 @@ def create_user_list(message_id):
             OIDS = FALSE
             )
             TABLESPACE pg_default;
-
             ALTER TABLE public."{}"
             OWNER to root;"""
    query_result = db_query.execute_query(query.format(message_id,message_id), is_dml=True)
@@ -89,7 +88,7 @@ def callback_inline(call):
             # bot.answer_callback_query(call.id, text="Done!")
             # user_id = json.loads(call.message)[0]
             print(1)
-            data = add_new_polling(call.message.chat.id,call.message.message_id)
+            data = add_new_polling(call.message.chat.id,call.message.message_id,call.message.text)
             try:
                 votes = data[0][3]
                 summa = data[0][4]
@@ -117,8 +116,12 @@ def get_result(message):
                             LIMIT 5;"""
     query_result = db_query.execute_query(query.format(message.chat.id))
     print(query_result.value)
-
-
+    msg = """Текст сообщения: {} \n
+    Колиичество ответов: {} \n
+    Среднее значение: {} \n
+            """
+    for data in query_result.value:
+        bot.send_message(message.chat.id, msg.format(data[5],data[3],data[4]), reply_markup=markup)
 
 
 @bot.message_handler(content_types='text')
