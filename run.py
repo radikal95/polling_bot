@@ -12,9 +12,7 @@ logging.basicConfig(filename="sample.log", level=logging.INFO)
 markup = telebot.types.InlineKeyboardMarkup()
 markup.row(telebot.types.InlineKeyboardButton('1', callback_data='1'),
            telebot.types.InlineKeyboardButton('2', callback_data='2'),
-           telebot.types.InlineKeyboardButton('3', callback_data='3'),
-           telebot.types.InlineKeyboardButton('4', callback_data='4'),
-           telebot.types.InlineKeyboardButton('5', callback_data='5'))
+           telebot.types.InlineKeyboardButton('3', callback_data='3'))
 
 def add_new_polling(chat_id,message_id,message_text):
     query = """SELECT *
@@ -75,9 +73,7 @@ def new_sum(message_id,new_summa):
 def test(message):
     questions = ["Мне понятна цель и задачи, которые стоят перед проектом со стороны Яндекс Такси",
                  "Роли участников проектной команды распределены, не дублируются и работа ведется в соответствии с этими ролями",
-                 "У участников проекта есть понятные роли, они не дублируется и непокрытых зон также нет",
-                 "Мы сконцентрированы: понимаем план и приоритеты шагов к общей цели и четко им следуем",
-                 "Мы эффективно проводим встречи (следуем повестке, не уходим в лишние детали, все участники встречи вовлечены и пр.)"]
+                 "У участников проекта есть понятные роли, они не дублируется и непокрытых зон также нет"]
     for msg in questions:
         bot.send_message(message.chat.id, msg ,reply_markup=markup)
 
@@ -113,15 +109,15 @@ def get_result(message):
                 	        FROM public.polls
                             WHERE chat_id={}
                             ORDER BY msg_id DESC
-                            LIMIT 5;"""
+                            LIMIT 3;"""
     query_result = db_query.execute_query(query.format(message.chat.id))
     print(query_result.value)
     msg = """Текст сообщения: {} \n
-    Колиичество ответов: {} \n
+    Количество ответов: {} \n
     Среднее значение: {} \n
             """
     for data in query_result.value:
-        bot.send_message(message.chat.id, msg.format(data[5],data[3],data[4]), reply_markup=markup)
+        bot.send_message(message.chat.id, msg.format(data[5],data[3],data[4]))
 
 
 @bot.message_handler(content_types='text')
