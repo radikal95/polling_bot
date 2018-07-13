@@ -27,7 +27,7 @@ def add_new_polling(chat_id,message_id,message_text):
 	         VALUES ({}, {},0,0,{});"""
         query_result = db_query.execute_query(query.format(chat_id, message_id,message_text), is_dml=True)
         create_user_list(message_id)
-        add_new_polling(chat_id,message_id)
+        add_new_polling(chat_id,message_id,message_text)
     else:
         return query_result.value
 
