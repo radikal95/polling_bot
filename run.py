@@ -138,7 +138,10 @@ def default_answer(message):
     # bot.send_message(message.chat.id, "You are not authorized")
     pass
 
-
+@bot.message_handler(regexp="/123")
+def test(message):
+    bot.send_document(message.chat.id,'test.xlsx')
+    pass
 
 while True:
     # bot.polling(none_stop=True)

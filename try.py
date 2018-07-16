@@ -28,13 +28,5 @@ for name in chat_names:
     workbook.create_sheet(name)
 workbook.save('test.xlsx')
 
-@bot.message_handler(regexp="/123")
-def test(message):
-    bot.send_document(message.chat.id,'test.xlsx')
 
-    pass
-
-
-while True:
-    bot.polling(none_stop=True)
 
