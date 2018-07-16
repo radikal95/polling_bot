@@ -1,5 +1,9 @@
 from db_tool import DbQuery
 from openpyxl import Workbook
+import config
+import telebot
+
+bot = telebot.TeleBot(config.token)
 
 db_query = DbQuery()
 workbook = Workbook()
@@ -8,6 +12,6 @@ query = """SELECT *
     	        ORDER by chat_id ASC, id ASC;"""
 query_result = db_query.execute_query(query)
 
-for i in range(10):
-    workbook.create_sheet(title="Number"+str(i))
-workbook.save(filename='test.xlsx')
+for data in query_result.value:
+    print(data)
+    
