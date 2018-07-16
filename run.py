@@ -80,14 +80,19 @@ def test(message):
         bot.send_message(message.chat.id, msg ,reply_markup=markup)
     pass
 
-@bot.message_handler(regexp="/all_result")
-def all_result(message):
-    workbook = Workbook()
-    for i in range(10):
-        workbook.create_sheet(title="Number"+str(i))
-    workbook.save(filename='test')
+# @bot.message_handler(regexp="/all_result")
+# def all_result(message):
+#     workbook = Workbook()
+#     for i in range(10):
+#         workbook.create_sheet(title="Number"+str(i))
+#     workbook.save(filename='test')
+#
+#
+#     pass
 
-
+@bot.message_handler(regexp="/radushin")
+def test(message):
+    bot.send_document(message.chat.id,'/polling_bot/test.zip')
     pass
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -138,11 +143,7 @@ def default_answer(message):
     # bot.send_message(message.chat.id, "You are not authorized")
     pass
 
-@bot.message_handler(regexp="/123")
-def test(message):
-    doc = open('test.xlsx', 'rb')
-    bot.send_document(message.chat.id,doc)
-    pass
+
 
 while True:
     # bot.polling(none_stop=True)

@@ -1,4 +1,5 @@
 from db_tool import DbQuery
+import zipfile
 from openpyxl import Workbook
 import config
 import telebot
@@ -28,5 +29,6 @@ for name in chat_names:
     workbook.create_sheet(name)
 workbook.save('test.xlsx')
 
-
-
+z = zipfile.ZipFile('test.zip', 'w')
+z.write('test.xlsx')
+z.close()
