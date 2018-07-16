@@ -4,6 +4,8 @@ import time
 import logging
 import json
 from db_tool import DbQuery
+from openpyxl import Workbook
+
 
 db_query = DbQuery()
 bot = telebot.TeleBot(config.token)
@@ -76,6 +78,17 @@ def test(message):
                  "У участников проекта есть понятные роли, они не дублируется и непокрытых зон также нет"]
     for msg in questions:
         bot.send_message(message.chat.id, msg ,reply_markup=markup)
+    pass
+
+@bot.message_handler(regexp="/all_result")
+def all_result(message):
+    workbook = Workbook()
+    for i in range(10):
+        workbook.create_sheet(title="Number"+str(i))
+    workbook.save(filename='test')
+
+
+    pass
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_inline(call):
@@ -128,9 +141,9 @@ def default_answer(message):
 
 
 while True:
-    bot.polling(none_stop=True)
-    # try:
-    #     bot.polling(none_stop=True)
-    # except Exception as e:
-    #     logging.error(e)
-    #     time.sleep(15)
+    # bot.polling(none_stop=True)
+    try:
+        bot.polling(none_stop=True)
+    except Exception as e:
+        logging.error(e)
+        time.sleep(15)
