@@ -140,7 +140,8 @@ def default_answer(message):
 
 @bot.message_handler(regexp="/123")
 def test(message):
-    bot.send_document(message.chat.id,'test.xlsx')
+    doc = open('test.xlsx', 'rb')
+    bot.send_document(message.chat.id,doc)
     pass
 
 while True:
