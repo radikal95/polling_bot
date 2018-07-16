@@ -15,4 +15,4 @@ query_result = db_query.execute_query(query)
 for data in query_result.value:
     # print(data)
     # print(data[1])
-    print(bot.get_chat(data[1]))
+    print(bot.get_chat(data[1]).title)
