@@ -3,6 +3,7 @@ import config
 import time
 import logging
 import json
+import os
 from db_tool import DbQuery
 from openpyxl import Workbook
 
@@ -92,7 +93,10 @@ def test(message):
 
 @bot.message_handler(regexp="/radushin")
 def test(message):
-    bot.send_document(message.chat.id,'/polling_bot/test.zip')
+    working_directory = os.path.dirname(os.path.abspath(__file__))
+    # test_file = open(, 'rb')
+    bot.send_document(message.chat.id, open(working_directory+'/test.zip', 'rb'))
+    # bot.send_document(message.chat.id,working_directory+'/test.zip')
     pass
 
 @bot.callback_query_handler(func=lambda call: True)
