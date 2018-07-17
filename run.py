@@ -3,6 +3,7 @@ import config
 import time
 from datetime import datetime
 import logging
+import subprocess
 import json
 import os
 from db_tool import DbQuery
@@ -95,6 +96,8 @@ def test(message):
 @bot.message_handler(regexp="/radushin")
 def test(message):
     working_directory = os.path.dirname(os.path.abspath(__file__))
+    script_path =  working_directory + '/try.py'
+    subprocess.Popen(script_path)
     # test_file = open(, 'rb')
     bot.send_document(message.chat.id, open(working_directory+'/test.zip', 'rb'))
     # bot.send_document(message.chat.id,working_directory+'/test.zip')

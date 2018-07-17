@@ -20,12 +20,13 @@ for data in query_result.value:
     # print(bot.get_chat(data[1]).title)
     if temp_chat_name ==bot.get_chat(data[1]).title:
         if i % 3 == 0 :
+            work_sheet['A' + str(row)] = str(data[6])
             work_sheet['B' + str(row)] = str(data[4]).replace('.', ',')
             work_sheet['C' + str(row)] = str(data[3])
             i = i + 1
             continue
         elif i % 3 == 1:
-            work_sheet['D'+str(row)] = str(data[4]).replace('.',',')
+            work_sheet['D' + str(row)] = str(data[4]).replace('.',',')
             work_sheet['E' + str(row)] = str(data[3])
             i= i +1
             continue
