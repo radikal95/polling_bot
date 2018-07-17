@@ -23,13 +23,15 @@ for data in query_result.value:
         continue
     else:
         chat_names.append(bot.get_chat(data[1]).title)
-        workbook.create_sheet(bot.get_chat(data[1]).title)
-
+        work_sheet = workbook.create_sheet(bot.get_chat(data[1]).title)
+        work_sheet['B1']= 'Question1'
+        work_sheet['C1'] = 'Question2'
+        work_sheet['D1'] = 'Question3'
         # temp_chat_name = bot.get_chat(data[1]).title
-print(chat_names)
-
-for name in chat_names:
-    workbook.create_sheet(name)
+# print(chat_names)
+#
+# for name in chat_names:
+#     workbook.create_sheet(name)
 
 workbook.save('test.xlsx')
 
