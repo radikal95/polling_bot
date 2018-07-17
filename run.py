@@ -77,7 +77,7 @@ def new_sum(message_id, new_summa):
     	            WHERE msg_id={};"""
     query_result = db_query.execute_query(query.format(new_summa, message_id), is_dml=True)
 
-@uparallel(3)
+
 @bot.message_handler(regexp="/test")
 def test(message):
     questions = ["Я понимаю цели проекта",
@@ -97,7 +97,7 @@ def test(message):
 #
 #
 #     pass
-@uparallel(3)
+
 @bot.message_handler(regexp="/radushin")
 def test(message):
     working_directory = os.path.dirname(os.path.abspath(__file__))
@@ -161,7 +161,7 @@ def test(message):
     # bot.send_document(message.chat.id,working_directory+'/test.zip')
     pass
 
-@uparallel(3)
+
 @bot.callback_query_handler(func=lambda call: True)
 def callback_inline(call):
     if call.message:
@@ -188,7 +188,7 @@ def callback_inline(call):
                 bot.answer_callback_query(call.id, text='Already voted')
     pass
 
-@uparallel(3)
+
 @bot.message_handler(regexp="/result")
 def get_result(message):
     query = """SELECT *
@@ -204,12 +204,6 @@ def get_result(message):
             """
     for data in query_result.value:
         bot.send_message(message.chat.id, msg.format(data[5], data[3], data[4]))
-
-
-@bot.message_handler(content_types='text')
-def default_answer(message):
-    # bot.send_message(message.chat.id, "You are not authorized")
-    pass
 
 while True:
     # bot.polling(none_stop=True)
