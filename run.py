@@ -1,4 +1,5 @@
 import telebot
+from uparallel import uparallel
 import config
 import time
 from datetime import datetime
@@ -13,9 +14,9 @@ bot = telebot.TeleBot(config.token)
 logging.basicConfig(filename="sample.log", level=logging.INFO)
 
 markup = telebot.types.InlineKeyboardMarkup()
-markup.row(telebot.types.InlineKeyboardButton('1', callback_data='1'),
-           telebot.types.InlineKeyboardButton('2', callback_data='2'),
-           telebot.types.InlineKeyboardButton('3', callback_data='3'))
+markup.row(telebot.types.InlineKeyboardButton('🙁', callback_data='1'),
+           telebot.types.InlineKeyboardButton('😐', callback_data='2'),
+           telebot.types.InlineKeyboardButton('😀', callback_data='3'))
 
 
 def add_new_polling(chat_id, message_id, message_text):
@@ -63,7 +64,6 @@ def user_is_new(message_id, user_id):
     else:
         return False
 
-
 def add_vote(message_id, votes):
     query = """UPDATE public.polls
 	            SET votes={}
@@ -77,12 +77,12 @@ def new_sum(message_id, new_summa):
     	            WHERE msg_id={};"""
     query_result = db_query.execute_query(query.format(new_summa, message_id), is_dml=True)
 
-
+@uparallel(3)
 @bot.message_handler(regexp="/test")
 def test(message):
-    questions = ["Мне понятна цель и задачи, которые стоят перед проектом со стороны Яндекс Такси",
-                 "Роли участников проектной команды распределены, не дублируются и работа ведется в соответствии с этими ролями",
-                 "У участников проекта есть понятные роли, они не дублируется и непокрытых зон также нет"]
+    questions = ["Я понимаю цели проекта",
+                 "Мне понятны границы ответственности участников проекта",
+                 "Я согласен с текущими приоритетами проекта"]
     for msg in questions:
         bot.send_message(message.chat.id, msg, reply_markup=markup)
     pass
@@ -97,7 +97,7 @@ def test(message):
 #
 #
 #     pass
-
+@uparallel(3)
 @bot.message_handler(regexp="/radushin")
 def test(message):
     working_directory = os.path.dirname(os.path.abspath(__file__))
@@ -161,7 +161,7 @@ def test(message):
     # bot.send_document(message.chat.id,working_directory+'/test.zip')
     pass
 
-
+@uparallel(3)
 @bot.callback_query_handler(func=lambda call: True)
 def callback_inline(call):
     if call.message:
@@ -188,7 +188,7 @@ def callback_inline(call):
                 bot.answer_callback_query(call.id, text='Already voted')
     pass
 
-
+@uparallel(3)
 @bot.message_handler(regexp="/result")
 def get_result(message):
     query = """SELECT *
@@ -210,7 +210,6 @@ def get_result(message):
 def default_answer(message):
     # bot.send_message(message.chat.id, "You are not authorized")
     pass
-
 
 while True:
     # bot.polling(none_stop=True)
