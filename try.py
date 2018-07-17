@@ -14,7 +14,7 @@ query = """SELECT *
 query_result = db_query.execute_query(query)
 temp_chat_name = ''
 chat_names = []
-i
+i = 0
 for data in query_result.value:
     # print(data)
     # print(data[1])
